@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script type="text/javascript" src="../../node_modules/vue/dist/vue.js"></script>
+</head>
+<body>
+<div>
+  <div id="root" style="width: 600px;height: 200px;background: #a8dbff;border: #2c3e50 1px solid">
+    <index v-style:data.any="{width: '300px',height: '100px',background: '#3cccff'}"></index>
+  </div>
+  <div id="test">
+    <test></test>
+  </div>
+</div>
+
+</body>
+<script type="text/javascript">
+
+  function remove() {
+    console.log('remove')
+  }
+
+  Vue.directive('style',{
+    inserted(el, binding,vNode){
+      console.log(el)
+      console.log(binding)
+      console.log(vNode)
+
+      el.style.width = binding.value.width
+      el.style.height = binding.value.height
+      el.style.background = binding.value.background
+
+      el.focus()
+    }
+  })
+
+  Vue.directive('test',{
+    inserted(el, binding,vNode){
+      console.log(el)
+      console.log(binding)
+      console.log(vNode)
+
+      el.focus()
+    }
+  })
+
+  Vue.component('test', {
+    inheritAttrs: false,
+    data() {
+      return {
+        testInput: 0
+      }
+    },
+    methods: {
+      test() {
+        console.log('执行test()')
+        this.testInput = 100;
+      }
+    },
+    template:
+      `
+        <input v-model="testInput" v-test:value="test()"></input>
+    `
+  })
+
+  Vue.component('index', {
+    inheritAttrs: false,
+    data() {
+      return {
+
+      }
+    },
+    template:
+    `
+        <input></input>
+    `
+  })
+
+  let vm = new Vue({
+    el: '#root'
+  })
+
+  let vmTest = new Vue({
+    el: '#test'
+  })
+
+</script>
+</html>

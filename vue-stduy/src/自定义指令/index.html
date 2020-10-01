@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script type="text/javascript" src="../../node_modules/vue/dist/vue.js"></script>
+</head>
+<body>
+<div id="root">
+  <index v-has:roles.any="['roleOne', 'roleTwo']"></index>
+</div>
+</body>
+<script type="text/javascript">
+
+  function removeChild(el) {
+    el.parentNode.removeChild(el)
+  }
+
+  // 定义一个v-has属性
+  Vue.directive('has', {
+    inserted(el, entities, vNode) {
+      try {
+        let vm = vNode.componentInstance
+
+        // v-has:arg.modifier = value
+        let arg = entities.arg
+        let value = entities.value
+        let modifier = entities.modifiers
+
+        if (!arg || (value && value.length === 0) || JSON.stringify(
+          modifier) === '{}') {
+          removeChild(el)
+        }
+
+        if (arg === 'roles') {
+          // 如果是both, 则判断value内元素是否都在roles中
+          if (modifier['both'] === true && value.every(e => {
+            return vm[arg].includes(e)
+          })) {
+            console.log('i have both permissions')
+            // 否则只要有一条符合就通过
+          } else if (modifier['any'] === true && value.some(e => {
+            return vm[arg].includes(e)
+          })) {
+            console.log('i have at least one of the permissions')
+          } else {
+            removeChild(el)
+          }
+        } else {
+          removeChild(el)
+        }
+      } catch (e) {
+        console.error(e)
+      }
+    }
+  })
+
+  Vue.component('index', {
+    inheritAttrs: false,
+    data() {
+      return {
+        roles: ['roleOne']
+      }
+    },
+    template:
+      `
+      <p>我显示了! 我有相应权限!</p>
+    `
+  })
+  let vm = new Vue(
+    {
+      el: '#root'
+    }
+  )
+</script>
+</html>

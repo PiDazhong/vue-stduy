@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script type="text/javascript" src="../../node_modules/vue/dist/vue.js"></script>
+</head>
+<body>
+<div id="root">
+  <index style="font-style: italic" class="class2" :real-prop="1999"
+         :data-age="24" :data-nums="888"></index>
+</div>
+</body>
+<script type="text/javascript">
+  Vue.component('index', {
+    inheritAttrs: false,
+    data() {
+      return {
+        name: 'index'
+      }
+    },
+    mounted() {
+      console.log(this.$attrs)
+    },
+    props: ['real-prop'],
+    template:
+      `
+      <div class="class1" style="color: red" data-nums="999"  v-bind="$attrs">
+        <span>this is span</span>
+      </div>
+    `
+  })
+  let vm = new Vue(
+    {
+      el: '#root'
+    }
+  )
+</script>
+</html>

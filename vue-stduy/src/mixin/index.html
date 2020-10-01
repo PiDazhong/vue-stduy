@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script type="text/javascript" src="../../node_modules/vue/dist/vue.js"></script>
+</head>
+<body>
+<div id="root">
+  <index></index>
+</div>
+</body>
+<script type="text/javascript">
+  let mixinA = {
+    data () {
+      return {
+        name: 'moduleA'
+      }
+    },
+    methods: {
+      sayHi () {
+        console.log('hi, im module A')
+      }
+    },
+    beforeCreate() {
+      console.log('module A beforeCreate')
+    },
+    created() {
+      console.log('module A  create')
+    },
+    beforeMount() {
+      console.log(this.$el)
+      console.log('module A  beforeMount')
+    },
+    mounted() {
+      console.log('module A  mounted')
+    },
+    beforeUpdate() {
+      console.log('module A  beforeUpdate')
+    },
+    updated() {
+      console.log('module A  updated')
+    },
+    beforeDestroy() {
+      console.log('module A  beforeDestroy')
+    },
+    destroyed() {
+      console.log('module A destroyed')
+    }
+  }
+
+  let mixinB = {
+    data () {
+      return {
+        name: 'moduleB',
+        num: 2
+      }
+    },
+    methods: {
+      sayHi () {
+        console.log('hi, im module B')
+      }
+    },
+    beforeCreate() {
+      console.log('module B beforecreate')
+    },
+    created() {
+      console.log('module B create')
+    },
+    beforeMount() {
+      console.log('module B  beforeMount')
+    },
+    mounted() {
+      console.log('module B  mounted')
+      this.num += 1
+      console.log(this.num)
+    },
+    beforeUpdate() {
+      console.log('module B  beforeUpdate')
+    },
+    updated() {
+      console.log('module B  updated')
+    },
+    beforeDestroy() {
+      console.log('module B  beforeDestroy')
+    },
+    destroyed() {
+      console.log('module B  destroyed')
+    }
+  }
+
+  Vue.component('index', {
+    data () {
+      return {
+        name: 'index',
+        num: 100
+      }
+    },
+    mixins: [mixinA, mixinB],
+    methods: {
+      sayHi () {
+        console.log('hi, im INDEX')
+      }
+    },
+    template: '<div><span>{{name}}</span><button @click="sayHi">clike</button></div>',
+    beforeCreate() {
+      console.log('module index beforeCreate')
+    },
+    created() {
+      console.log('module index create')
+    },
+    beforeMount() {
+      console.log('module index beforeMount')
+    },
+    mounted() {
+      console.log(this.num)
+      this.name = 'jack'
+      this.$nextTick(function () {
+        console.log(111111111)
+      })
+      console.log('22222222')
+      console.log('module index mounted')
+    },
+    beforeUpdate() {
+      console.log('module index beforeUpdate')
+    },
+    updated() {
+      console.log('module index updated')
+    },
+    beforeDestroy() {
+      console.log('module index beforeDestroy')
+    },
+    destroyed() {
+      console.log('module index destroyed')
+    }
+  })
+  let vm = new Vue(
+    {
+      el: '#root',
+      beforeMount() {
+        console.log('-------', this.$el)
+      },
+      mounted() {
+        console.log('-------', this.$el)
+      }
+    }
+  )
+  console.log(vm)
+</script>
+</html>

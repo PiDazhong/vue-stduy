@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title><!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <title>Title</title>
+      <script type="text/javascript" src="../../node_modules/vue/dist/vue.js"></script>
+      <style type="text/css">
+        .index-li {
+          width: 50px;
+          float: left;
+          border: 1px solid mediumturquoise;
+          margin: 10px;
+        }
+        .index-li-active {
+          background: pink;
+        }
+      </style>
+    </head>
+<body>
+<div id="root"></div>
+</body>
+<script>
+  Vue.component('MyTabs', {
+    props: {
+      defaultActive: {
+        type: Number
+      },
+      tabs: {
+        type: Array,
+        required: true
+      }
+    },
+    data() {
+      return {
+        active: 0,
+        name: '12'
+      }
+    },
+    template:
+    `
+      <ul style="list-style: none">
+        <li v-for="(tab, index) in tabs"
+            @click="handleChange(index)"
+            :key="tab.id"
+            :class="['index-li',activated(index)]">
+          {{tab.name}}
+        </li>
+      </ul>
+    `,
+    methods: {
+      activated(index) {
+        if(this.defaultActive !== undefined){
+          this.active = this.defaultActive
+        }
+        return index == this.active ? 'index-li-active' : ''
+      },
+      handleChange(index){
+        if(this.defaultActive !== undefined){
+          console.log('受控组件')
+          this.$emit('tab-change', index)
+          return
+        }
+        this.active = index
+      }
+    }
+  })
+
+  let vm = new Vue({
+    el: '#root',
+    data() {
+      return {
+        tabs: [{id: 1, name: '第一'},{id: 2, name: '第二'},{id: 3, name: '第三'}],
+        defaultActive: 1
+      }
+    },
+    template:
+    `
+      <my-tabs :tabs="tabs"
+               :default-active="defaultActive"
+                @tab-change="handleTabChange">
+      </my-tabs>
+    `,
+    methods: {
+      handleTabChange(index) {
+        console.log(index)
+        this.defaultActive = index
+      }
+    }
+  })
+</script>
+</html>
